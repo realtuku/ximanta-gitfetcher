@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,11 +22,12 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.CloudDownload
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.ErrorOutline
-import androidx.compose.material.icons.filled.Github
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -51,11 +53,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.ximanta.gitfetcher.data.FetchResult
 import com.ximanta.gitfetcher.data.GitHubApi
@@ -70,7 +72,7 @@ import kotlinx.coroutines.launch
  *  • User pastes a GitHub repo URL (any of the accepted shapes).
  *  • The repo name is parsed live and appears in the button label.
  *  • Tapping the button fetches repo info + the flattened tree.
- *  • On success, `onRepoLoaded` is invoked with the parsed data.
+ *  • On success, onRepoLoaded is invoked with the parsed data.
  */
 @Composable
 fun UrlScreen(
@@ -142,7 +144,7 @@ fun UrlScreen(
                     },
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Filled.Github,
+                            imageVector = Icons.Filled.Code,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary
                         )
@@ -179,12 +181,12 @@ fun UrlScreen(
                     ),
                     keyboardActions = KeyboardActions(
                         onGo = {
-                            if (canFetch) {
+                            if (canFetch && parsed != null) {
                                 keyboard?.hide()
                                 isLoading = true
                                 errorMessage = null
                                 scope.launch {
-                                    val result = fetchRepo(parsed!!.first, parsed.second)
+                                    val result = fetchRepo(parsed.first, parsed.second)
                                     isLoading = false
                                     when (result) {
                                         is FetchResult.Success -> onRepoLoaded(
@@ -219,7 +221,7 @@ fun UrlScreen(
                         StatusChip(
                             text = "${parsed.first}/${parsed.second}",
                             tone = ChipTone.Success,
-                            leadingIcon = Icons.Filled.CheckCircle2
+                            leadingIcon = Icons.Filled.CheckCircle
                         )
                     }
                     else -> Row(verticalAlignment = Alignment.CenterVertically) {
@@ -399,6 +401,7 @@ private fun ExampleHints(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
                     textAlign = TextAlign.Start
                 )
