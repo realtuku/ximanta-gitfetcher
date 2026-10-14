@@ -21,6 +21,7 @@ import com.ximanta.gitfetcher.ui.FilesScreen
 import com.ximanta.gitfetcher.ui.TermsScreen
 import com.ximanta.gitfetcher.ui.UrlScreen
 import com.ximanta.gitfetcher.ui.theme.XimantaGitFetcherTheme
+import com.ximanta.gitfetcher.util.Prefs
 
 /**
  * Single-activity entry point.
@@ -29,6 +30,11 @@ import com.ximanta.gitfetcher.ui.theme.XimantaGitFetcherTheme
  * needed for such a small app.
  *
  *   TermsScreen  ──agree──▶  UrlScreen  ──fetch──▶  FilesScreen
+ *
+ * v2.0.0:
+ *   • Terms acceptance is now persisted via Prefs (SharedPreferences).
+ *     On every launch we check disk first. Once agreed, the Terms screen
+ *     is skipped forever on this installation.
  */
 class MainActivity : ComponentActivity() {
 
@@ -61,8 +67,19 @@ private sealed interface Screen {
 @Composable
 private fun XimantaApp() {
 
-    // Persist "terms agreed" across process death / rotation.
-    var termsAgreed by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    // ---------------------------------------------------------------------
+    // Terms acceptance — read once at startup from SharedPreferences.
+    //
+    // remember { } (not rememberSaveable) is correct here because the
+    // initial value must be read from disk exactly once per process.
+    // Rotation doesn't re-run the lambda, process death does, which is
+    // fine — the value on disk is authoritative.
+    // ---------------------------------------------------------------------
+    var termsAgreed by remember {
+        mutableStateOf(Prefs.hasAcceptedTerms(context))
+    }
 
     // Current screen. Not saveable because RepoFile/RepoInfo aren't Parcelable —
     // on rotation during Files screen we fall back to Url screen, which is fine.
@@ -72,15 +89,14 @@ private fun XimantaApp() {
         )
     }
 
-    // Keeps LocalContext referenced so lint is happy about Compose best practices.
-    @Suppress("UNUSED_VARIABLE")
-    val context = LocalContext.current
-
     when (val current = screen) {
 
         Screen.Terms -> {
             TermsScreen(
                 onAgree = {
+                    // Persist to disk FIRST so a crash right after tap
+                    // doesn't send the user back to the Terms screen.
+                    Prefs.setTermsAccepted(context)
                     termsAgreed = true
                     screen = Screen.Url
                 }
