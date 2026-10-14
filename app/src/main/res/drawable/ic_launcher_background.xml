@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ximanta GitFetcher — adaptive launcher icon background.
+
+    A diagonal gradient from Ximanta Violet (#6C4CF1) in the top-left
+    to Mint Pulse (#2DD4BF) in the bottom-right — the same gradient
+    used by XimantaLogo() inside the app, so the launcher icon and the
+    in-app branding match exactly.
+
+    Adaptive icon convention:
+      • Canvas is 108 × 108 dp
+      • Outer 18 dp on every edge is the "safe zone" (may be clipped)
+      • Inner 72 × 72 dp is always visible
+      • This layer paints edge-to-edge; the foreground sits on top
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Base solid colour — visible in the rare case gradients fail
+         (e.g. some very old launchers). Matches the gradient's mid-point. -->
+    <path
+        android:fillColor="#6C4CF1"
+        android:pathData="M0,0 H108 V108 H0 Z" />
+
+    <!-- Diagonal gradient overlay: violet (top-left) → mint (bottom-right). -->
+    <path
+        android:pathData="M0,0 H108 V108 H0 Z">
+        <aapt:attr xmlns:aapt="http://schemas.android.com/aapt"
+            name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="0"
+                android:startY="0"
+                android:endX="108"
+                android:endY="108"
+                android:startColor="#6C4CF1"
+                android:centerColor="#4E7BEE"
+                android:endColor="#2DD4BF"
+                android:tileMode="clamp" />
+        </aapt:attr>
+    </path>
+
+    <!-- Soft radial highlight in the top-left — adds depth without noise. -->
+    <path
+        android:pathData="M0,0 H108 V108 H0 Z">
+        <aapt:attr xmlns:aapt="http://schemas.android.com/aapt"
+            name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="30"
+                android:centerY="30"
+                android:gradientRadius="70"
+                android:startColor="#33FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:tileMode="clamp" />
+        </aapt:attr>
+    </path>
+</vector>
