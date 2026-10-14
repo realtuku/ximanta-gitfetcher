@@ -35,11 +35,89 @@ No folder hunting. No "where did that file go?". Just:
 
 ---
 
+## 📱 Screenshots — Full Walkthrough
+
+Follow the app from install to "all files downloaded":
+
+### 1 · Install the APK
+
+<p align="center">
+  <img src="Screenshot_2026-10-15-00-07-07-887_com.google.android.packageinstaller.jpg" width="280" alt="Installing Ximanta GitFetcher"/>
+</p>
+
+<p align="center"><em>Android's package installer verifies and installs the APK — no Play Store required.</em></p>
+
+---
+
+### 2 · Terms & Conditions
+
+<p align="center">
+  <img src="Screenshot_2026-10-15-00-07-37-231_com.ximanta.gitfetcher.jpg" width="280" alt="Terms screen top"/>
+</p>
+
+<p align="center"><em>Branded hero with the Ximanta logo, wordmark, and 5-point terms.</em></p>
+
+<p align="center">
+  <img src="Screenshot_2026-10-15-00-07-39-608_com.ximanta.gitfetcher.jpg" width="280" alt="Terms screen bottom with Agree button"/>
+</p>
+
+<p align="center"><em>Tick the checkbox to unlock the violet <strong>AGREE &amp; CONTINUE</strong> button.</em></p>
+
+---
+
+### 3 · Repository URL Entry
+
+<p align="center">
+  <img src="Screenshot_2026-10-15-00-07-48-377_com.ximanta.gitfetcher.jpg" width="280" alt="URL screen empty"/>
+</p>
+
+<p align="center"><em>Empty state — paste a link, tap the clipboard icon, or pick an example.</em></p>
+
+<p align="center">
+  <img src="Screenshot_2026-10-15-00-07-52-413_com.ximanta.gitfetcher.jpg" width="280" alt="URL screen valid"/>
+</p>
+
+<p align="center"><em>Live parsing — the moment the URL is valid, the chip lights up green and the button becomes <strong>Fetch ximanta-gitfetcher</strong>.</em></p>
+
+---
+
+### 4 · File List
+
+<p align="center">
+  <img src="Screenshot_2026-10-15-00-08-00-347_com.ximanta.gitfetcher.jpg" width="280" alt="Files list top"/>
+</p>
+
+<p align="center"><em>Every file, flattened. <strong>34 files · 169.3 KB</strong> with the summary bar, live filter, and a ⬇ button on every row.</em></p>
+
+<p align="center">
+  <img src="Screenshot_2026-10-15-00-08-05-104_com.ximanta.gitfetcher.jpg" width="280" alt="Files list scrolled"/>
+</p>
+
+<p align="center"><em>Scroll to the bottom for the <strong>Download All Files</strong> panel — 34 files, 169.3 KB total.</em></p>
+
+---
+
+### 5 · Download Progress
+
+<p align="center">
+  <img src="Screenshot_2026-10-15-00-08-12-875_com.ximanta.gitfetcher.jpg" width="280" alt="Downloading in progress"/>
+</p>
+
+<p align="center"><em>Sequential bulk download with a live progress bar and a <strong>2 saved</strong> counter chip.</em></p>
+
+<p align="center">
+  <img src="Screenshot_2026-10-15-00-08-35-164_com.ximanta.gitfetcher.jpg" width="280" alt="All files downloaded"/>
+</p>
+
+<p align="center"><em>All <strong>34 files saved</strong> — checkmarks on every row, snackbar confirms the destination, button becomes <strong>Re-download All</strong>.</em></p>
+
+---
+
 ## ✨ Features
 
 | Feature | Description |
 |---|---|
-| 🔗 **Smart URL parsing** | Accepts `https://github.com/user/repo`, `https://github.com/user/repo.git`, `github.com/user/repo`, or `git@github.com:user/repo.git` |
+| 🔗 **Smart URL parsing** | Accepts `https://github.com/user/repo`, `...repo.git`, `github.com/user/repo`, `git@github.com:user/repo.git` |
 | 📂 **Recursive flattening** | Files nested 10 folders deep appear exactly like root-level files |
 | ⬇️ **Per-file download** | A download button sits on the right of every single file row |
 | 📦 **Download All** | One button at the bottom of the list grabs everything |
@@ -49,22 +127,6 @@ No folder hunting. No "where did that file go?". Just:
 | 🌗 **Dark / Light theme** | Follows system theme automatically |
 | 💾 **Scoped storage safe** | Uses `MediaStore` on Android 10+, legacy file API below that |
 | 🤖 **CI-built APK** | Every Release automatically builds and attaches the APK |
-
----
-
-## 📱 Screens
-
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  1. TERMS       │ ──▶ │  2. URL INPUT   │ ──▶ │  3. FILE LIST   │
-│                 │     │                 │     │                 │
-│  [X logo]       │     │  ┌───────────┐  │     │ src/main.rs   ⬇ │
-│  Terms text…    │     │  │ paste url │  │     │ README.md     ⬇ │
-│  ☑ I agree      │     │  └───────────┘  │     │ build.gradle  ⬇ │
-│  [  AGREE  ]    │     │ [Fetch my-repo] │     │ …             ⬇ │
-│                 │     │                 │     │ [Download All]  │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-```
 
 ---
 
@@ -109,7 +171,7 @@ You can also trigger it manually: **Actions → Build APK → Run workflow**.
 All files are **flattened**. A file at `src/main/java/Foo.kt` is saved as:
 
 ```
-src__main__java__Foo.kt
+src_main_java_Foo.kt
 ```
 
 This keeps the original path readable while living in a single flat folder — exactly
@@ -151,7 +213,7 @@ On **Android 10+** no runtime storage permission is needed — the app uses
 
 1. `GET https://api.github.com/repos/{owner}/{repo}` → reads `default_branch`
 2. `GET https://api.github.com/repos/{owner}/{repo}/git/trees/{branch}?recursive=1`
-   → returns **every blob in the whole tree in one call** (no recursion needed client-side)
+   → returns **every blob in the whole tree in one call**
 3. `GET https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{path}`
    → raw bytes for each file
 
@@ -181,7 +243,7 @@ MIT — do whatever you want, just don't blame me.
 
 <div align="center">
 
-**Built with ❤️ by [Ximanta Here](https://github.com/realximanta)**
+**Built with ❤️ by [Ximanta](https://github.com/realximanta)**
 
 ⭐ Star this repo if it saved you time.
 
