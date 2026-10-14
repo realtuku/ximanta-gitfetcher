@@ -1,0 +1,54 @@
+# -----------------------------------------------------------------------------
+# Ximanta GitFetcher — Git ignore rules
+# -----------------------------------------------------------------------------
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+local.properties
+
+# Android build outputs
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Compiled Kotlin
+*.kotlin_module
+
+# Logs & OS junk
+*.log
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Keystores (never commit these!)
+*.jks
+*.keystore
+keystore.properties
+
+# CI / signing artifacts
+release-apks/
+
+# Kotlin daemon
+.kotlin/
+
+# Android NDK
+obj/
+libs/
+
+# Firebase / Google services (if ever added)
+google-services.json
