@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ximanta GitFetcher — legacy Auto Backup rules (Android 11 and below).
+
+    Referenced by AndroidManifest.xml:
+        android:fullBackupContent="@xml/backup_rules"
+
+    Android's Auto Backup service can copy app data to the user's Google
+    Drive (or a device-transfer target) so it restores automatically when
+    they reinstall the app or set up a new device.
+
+    For Ximanta GitFetcher there is almost nothing worth backing up:
+
+      • No user accounts or login state
+      • No persistent preferences (the Terms acceptance is session-only)
+      • No in-app database
+      • Downloaded files live in Downloads/Ximanta/ — those are user-owned
+        and NOT part of the app's private storage, so Auto Backup never
+        touches them anyway
+
+    So we allow the bare minimum and exclude everything we can think of,
+    keeping backup payloads tiny and avoiding accidentally shipping caches
+    or temporary files to the cloud.
+-->
+<full-backup-content>
+
+    <!-- ============================================================= -->
+    <!-- INCLUDED                                                      -->
+    <!-- ============================================================= -->
+    <!--
+        There is no explicit <include> directive, which means Android
+        will back up the entire app data directory by default:
+
+            /data/data/com.ximanta.gitfetcher/
+            ├── shared_prefs/       (empty — nothing written yet)
+            ├── databases/          (empty)
+            ├── files/              (empty)
+            └── cache/              (excluded below)
+
+        If we ever add SharedPreferences (e.g. "remember Terms accepted"),
+        Auto Backup will handle it automatically without changes here.
+    -->
+
+    <!-- ============================================================= -->
+    <!-- EXCLUDED — caches, temp files, logs                           -->
+    <!-- ============================================================= -->
+
+    <!-- OkHttp's on-disk response cache (if we ever enable one). -->
+    <exclude domain="file" path="okhttp_cache/" />
+
+    <!-- Kotlin/Compose build caches that might be written at runtime. -->
+    <exclude domain="file" path=".kotlin/" />
+
+    <!-- Any temporary scratch space our code might use for downloads. -->
+    <exclude domain="file" path="tmp/" />
+    <exclude domain="file" path="temp/" />
+
+    <!-- Log files written by our own code (we don't write any, but just in case). -->
+    <exclude domain="file" path="logs/" />
+
+    <!-- ============================================================= -->
+    <!-- EXCLUDED — the entire cache directory                         -->
+    <!-- ============================================================= -->
+
+    <!--
+        The cache domain is not backed up by default, but being explicit
+        documents the intent and prevents future config changes from
+        accidentally including it.
+    -->
+    <exclude domain="cache" path="." />
+
+    <!-- ============================================================= -->
+    <!-- EXCLUDED — noBackupFilesDir                                   -->
+    <!-- ============================================================= -->
+
+    <!--
+        Files written to Context.getNoBackupFilesDir() are already
+        excluded by the framework, but listing them here makes the
+        contract explicit for anyone reading the file.
+    -->
+    <exclude domain="file" path="no_backup/" />
+
+    <!-- ============================================================= -->
+    <!-- EXCLUDED — external storage (app-scoped)                      -->
+    <!-- ============================================================= -->
+
+    <!--
+        App-specific external directories (getExternalFilesDir) are
+        excluded by default on Android 10+, but we belt-and-suspenders
+        them here for older versions where behavior differs.
+    -->
+    <exclude domain="external" path="." />
+
+</full-backup-content>
