@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ximanta GitFetcher — adaptive launcher icon foreground.
+
+    A bold white "X" with an arrowhead on the descending diagonal —
+    the same Ximanta GitFetcher brand mark used in-app, scaled and
+    centred for the 72 × 72 dp safe zone inside the 108 × 108 dp
+    adaptive-icon canvas.
+
+    Canvas:    108 × 108 dp
+    Safe zone: centred 72 × 72 dp  (x: 18..90, y: 18..90)
+    Content:   centred 56 × 56 dp  (x: 26..82, y: 26..82)
+               → generous 8 dp breathing room on every side inside the
+                 safe zone, so even the tightest launcher mask
+                 (Samsung squircle, Pixel circle) never clips the mark.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- =========================================================== -->
+    <!-- Ascending stroke of the X: bottom-left  →  top-right        -->
+    <!-- =========================================================== -->
+
+    <!-- Lower segment of the ascending stroke (from the crossing point
+         down to the bottom-left corner). -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="
+            M 26,82
+            L 36,82
+            L 46,69
+            L 46,63
+            L 30,82.5
+            A 3.5,3.5 0 0,0 26,82 Z" />
+
+    <!-- Upper segment of the ascending stroke (from the crossing point
+         up to the top-right corner). -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="
+            M 82,26
+            L 72,26
+            L 62,39
+            L 62,45
+            L 78,25.5
+            A 3.5,3.5 0 0,0 82,26 Z" />
+
+    <!-- =========================================================== -->
+    <!-- Descending stroke of the X: top-left  →  bottom-right       -->
+    <!-- =========================================================== -->
+
+    <!-- Upper segment of the descending stroke (from the top-left
+         corner down to the crossing point). -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="
+            M 26,26
+            L 36,26
+            L 46,39
+            L 46,45
+            L 30,25.5
+            A 3.5,3.5 0 0,0 26,26 Z" />
+
+    <!-- Lower segment of the descending stroke (from the crossing point
+         down to the arrow tip in the bottom-right corner). -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="
+            M 82,82
+            L 72,82
+            L 62,69
+            L 62,63
+            L 78,82.5
+            A 3.5,3.5 0 0,0 82,82 Z" />
+
+    <!-- =========================================================== -->
+    <!-- Arrowhead — a solid triangle at the bottom-right tip,        -->
+    <!-- signalling "pull / fetch / download".                        -->
+    <!-- =========================================================== -->
+
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="
+            M 60,74
+            L 82,74
+            L 82,96
+            Z" />
+</vector>
