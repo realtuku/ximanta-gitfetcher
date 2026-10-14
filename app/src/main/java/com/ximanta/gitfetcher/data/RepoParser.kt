@@ -1,10 +1,11 @@
 package com.ximanta.gitfetcher.data
 
 /**
- * Parses every flavour of GitHub repository URL a user might paste.
+ * Parses every flavour of GitHub repository identifier a user might paste.
  *
- * Supported inputs (case-insensitive for the host, case-preserving for owner/repo):
+ * v2.0.0 adds the SHORTHAND form: `owner/repo` — no scheme, no host.
  *
+ *  Full URLs (unchanged from v1):
  *  ┌──────────────────────────────────────────────────────────────────────────┐
  *  │ https://github.com/realximanta/ximanta-gitfetcher                        │
  *  │ https://github.com/realximanta/ximanta-gitfetcher.git                    │
@@ -15,12 +16,19 @@ package com.ximanta.gitfetcher.data
  *  │ git@github.com:realximanta/ximanta-gitfetcher.git                        │
  *  │ ssh://git@github.com/realximanta/ximanta-gitfetcher.git                  │
  *  │ https://github.com/realximanta/ximanta-gitfetcher/tree/main              │
- *  │ https://github.com/realximanta/ximanta-gitfetcher/tree/main/src/main     │
  *  │ https://github.com/realximanta/ximanta-gitfetcher?tab=readme             │
  *  │ https://github.com/realximanta/ximanta-gitfetcher#readme                 │
  *  └──────────────────────────────────────────────────────────────────────────┘
  *
- * Returns null when the string doesn't look like a GitHub repo URL at all.
+ *  Shorthand (new in v2.0.0):
+ *  ┌──────────────────────────────────────────────────────────────────────────┐
+ *  │ realximanta/ximanta-gitfetcher                                           │
+ *  │ realximanta/ximanta-gitfetcher.git                                       │
+ *  │ realximanta/ximanta-gitfetcher/                                          │
+ *  │ octocat/Hello-World                                                      │
+ *  └──────────────────────────────────────────────────────────────────────────┘
+ *
+ * Returns null when the string doesn't look like a GitHub repo identifier at all.
  */
 object RepoParser {
 
@@ -31,9 +39,26 @@ object RepoParser {
         val input = rawInput.trim()
         if (input.isEmpty()) return null
 
+        // 1. Try the full-URL path first — it's the stricter parser.
+        parseFullUrl(input)?.let { return it }
+
+        // 2. Fall back to the owner/repo shorthand.
+        return parseShorthand(input)
+    }
+
+    /**
+     * Convenience: extracts just the repo name (second segment).
+     * Returns null if parsing fails.
+     */
+    fun extractRepoName(rawInput: String): String? = parse(rawInput)?.second
+
+    // -------------------------------------------------------------------------
+    // Full URL parsing — everything from v1, unchanged
+    // -------------------------------------------------------------------------
+
+    private fun parseFullUrl(input: String): Pair<String, String>? {
+
         // --- Normalise SSH shorthand: git@github.com:owner/repo.git -------------
-        // Convert to https://github.com/owner/repo.git so the rest of the
-        // parser only needs to deal with one shape.
         val normalised = when {
             input.startsWith("git@", ignoreCase = true) -> {
                 val afterAt = input.substringAfter("@")
@@ -52,21 +77,27 @@ object RepoParser {
                 "https://" + input.removePrefix("git://")
             }
 
-            // No scheme: "github.com/owner/repo" → add https://
-            !input.contains("://") -> "https://$input"
+            // No scheme present.
+            !input.contains("://") -> {
+                // Only auto-prefix https:// if it looks like a github URL.
+                // Otherwise it might be the shorthand form — let parseShorthand
+                // deal with it.
+                if (input.contains("github.com", ignoreCase = true)) {
+                    "https://$input"
+                } else {
+                    return null
+                }
+            }
 
             else -> input
         }
 
-        // --- Strip fragment and query string ------------------------------------
+        // --- Strip fragment, query, trailing slashes, trailing .git -----------
         var cleaned = normalised
             .substringBefore('#')
             .substringBefore('?')
+            .trimEnd('/')
 
-        // --- Strip trailing slashes ---------------------------------------------
-        cleaned = cleaned.trimEnd('/')
-
-        // --- Strip a trailing ".git" --------------------------------------------
         if (cleaned.endsWith(".git", ignoreCase = true)) {
             cleaned = cleaned.substring(0, cleaned.length - 4)
         }
@@ -80,12 +111,15 @@ object RepoParser {
 
         if (!isGithub) return null
 
-        // --- Split the path portion --------------------------------------------
         val afterHost = when {
-            lower.startsWith("https://www.github.com/") -> cleaned.substring("https://www.github.com/".length)
-            lower.startsWith("http://www.github.com/") -> cleaned.substring("http://www.github.com/".length)
-            lower.startsWith("https://github.com/") -> cleaned.substring("https://github.com/".length)
-            else -> cleaned.substring("http://github.com/".length)
+            lower.startsWith("https://www.github.com/") ->
+                cleaned.substring("https://www.github.com/".length)
+            lower.startsWith("http://www.github.com/") ->
+                cleaned.substring("http://www.github.com/".length)
+            lower.startsWith("https://github.com/") ->
+                cleaned.substring("https://github.com/".length)
+            else ->
+                cleaned.substring("http://github.com/".length)
         }
 
         val segments = afterHost.split('/').filter { it.isNotBlank() }
@@ -94,26 +128,73 @@ object RepoParser {
         val owner = segments[0]
         val repo = segments[1]
 
-        // Reject obviously-invalid owner/repo tokens
         if (!isValidSlug(owner) || !isValidSlug(repo)) return null
 
         return owner to repo
     }
 
-    /**
-     * Convenience: extracts just the repo name (second segment).
-     * Returns null if parsing fails.
-     */
-    fun extractRepoName(rawInput: String): String? = parse(rawInput)?.second
+    // -------------------------------------------------------------------------
+    // Shorthand parsing — new in v2.0.0
+    // -------------------------------------------------------------------------
 
     /**
-     * GitHub usernames/orgs: alphanumeric + hyphens, 1–39 chars, no leading
-     * or trailing hyphen, no consecutive hyphens.
+     * Accepts exactly two slash-separated tokens that look like a GitHub
+     * owner and repo name.
+     *
+     * Rejects anything containing:
+     *   • a scheme marker   (`://`)
+     *   • an `@`            (SSH/email)
+     *   • a `:`             (port, SSH)
+     *   • whitespace, `?`, or `#`
+     *   • a dot in the OWNER segment (so `github.com/foo` is treated as a
+     *     hostname, not as owner=`github.com`)
+     *
+     * Repo names may contain dots — GitHub allows them.
+     */
+    private fun parseShorthand(input: String): Pair<String, String>? {
+
+        // Reject markers that only appear in URLs or SSH strings.
+        if (input.contains("://")) return null
+        if (input.contains("@")) return null
+        if (input.contains(":")) return null
+        if (input.any { it.isWhitespace() }) return null
+        if (input.contains("?")) return null
+        if (input.contains("#")) return null
+
+        // Strip trailing slashes and .git
+        var cleaned = input.trimEnd('/')
+        if (cleaned.endsWith(".git", ignoreCase = true)) {
+            cleaned = cleaned.substring(0, cleaned.length - 4)
+        }
+
+        val segments = cleaned.split('/').filter { it.isNotBlank() }
+        if (segments.size != 2) return null
+
+        val owner = segments[0]
+        val repo = segments[1]
+
+        // A dot in the first segment means "this is a hostname", not a username.
+        // GitHub usernames technically may contain dots, but the ambiguity cost
+        // outweighs the benefit — a user with a dotted username can paste the
+        // full URL instead.
+        if (owner.contains('.')) return null
+
+        if (!isValidSlug(owner) || !isValidSlug(repo)) return null
+
+        return owner to repo
+    }
+
+    // -------------------------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * GitHub usernames/orgs: alphanumeric + hyphens, 1–39 chars.
      * Repo names: same charset plus dots and underscores.
      *
-     * We keep this slightly lenient — GitHub itself is the final validator;
-     * this is just a sanity filter so we don't send an obvious garbage string
-     * to the API.
+     * Kept slightly lenient — GitHub's API is the final validator.
+     * This is just a sanity filter so we don't send an obvious garbage
+     * string to the network.
      */
     private fun isValidSlug(value: String): Boolean {
         if (value.isEmpty() || value.length > 100) return false
