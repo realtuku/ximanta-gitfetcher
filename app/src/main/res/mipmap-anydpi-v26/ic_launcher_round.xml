@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ximanta GitFetcher — adaptive launcher icon (round variant).
+
+    Referenced by AndroidManifest.xml:
+        android:roundIcon="@mipmap/ic_launcher_round"
+
+    On Android 8.0+ this is functionally identical to ic_launcher.xml —
+    the launcher applies its own mask shape and picks whichever resource
+    matches the user's icon-shape preference. Keeping both files present
+    satisfies the manifest contract and avoids a Resources$NotFoundException
+    on launchers that specifically request the round variant.
+
+    Layers (same as the standard icon):
+        background  →  violet-to-mint gradient
+        foreground  →  white X mark with arrowhead
+        monochrome  →  same white X, used for Android 13+ themed icons
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background: full-canvas diagonal gradient -->
+    <background
+        android:drawable="@drawable/ic_launcher_background" />
+
+    <!-- Foreground: the brand X, centred inside the 72 dp safe zone -->
+    <foreground
+        android:drawable="@drawable/ic_launcher_foreground" />
+
+    <!-- Monochrome: enables Android 13+ "Themed icons" support -->
+    <monochrome
+        android:drawable="@drawable/ic_launcher_foreground" />
+
+</adaptive-icon>
