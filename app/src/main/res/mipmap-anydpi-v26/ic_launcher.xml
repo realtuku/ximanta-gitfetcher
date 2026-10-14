@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ximanta GitFetcher — adaptive launcher icon.
+
+    Android 8.0 (API 26) and above use this file to build the home-screen
+    icon by layering:
+
+        ic_launcher_background.xml   (violet → mint gradient)
+        ic_launcher_foreground.xml   (white X mark)
+
+    The `<monochrome>` layer is used on Android 13+ when the user enables
+    "Themed icons" in their launcher settings — it recolours the icon to
+    match their wallpaper palette automatically.
+
+    Devices below API 26 (Android 7 and older) fall back to the legacy
+    PNG mipmaps. Our minSdk is 26 so that fallback never fires, but the
+    file structure mirrors the standard Android template.
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background layer: full-canvas gradient -->
+    <background
+        android:drawable="@drawable/ic_launcher_background" />
+
+    <!-- Foreground layer: the white X mark, centred in the safe zone -->
+    <foreground
+        android:drawable="@drawable/ic_launcher_foreground" />
+
+    <!-- Monochrome layer for Android 13+ themed icons.
+         Reuses the same foreground vector — the system recolours it. -->
+    <monochrome
+        android:drawable="@drawable/ic_launcher_foreground" />
+
+</adaptive-icon>
