@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ximanta GitFetcher — brand mark.
+
+    Design: a stylised "X" built from two strokes, with the descending
+    diagonal split into an arrow shape pointing down-right — the visual
+    metaphor of "pulling code from a repo".
+
+    Rendered on top of a gradient background by XimantaLogo() in
+    Components.kt, so this drawable is drawn in white (currentColor)
+    and never needs its own background.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#FFFFFFFF">
+
+    <!-- Ascending stroke of the X: bottom-left → top-right -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M5.4,3 L12,10.6 L12,13.8 L3.2,3.6 A0.8,0.8 0 0,1 3.8,3 Z" />
+
+    <!-- Top-right cap of the ascending stroke -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M20.2,3.6 L12,13.6 L12,10.4 L18.6,3 A0.8,0.8 0 0,1 20.2,3.6 Z" />
+
+    <!-- Descending stroke of the X: top-left → bottom-right -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M3.2,20.4 L12,10 L12,13.4 L4.8,21 A0.8,0.8 0 0,1 3.2,20.4 Z" />
+
+    <!-- Arrow head at the bottom-right end of the descending stroke -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12,13.4 L20.8,20.4 A0.8,0.8 0 0,1 19.2,21 L12,14.6 Z" />
+
+    <!-- Arrow tip — a small filled triangle suggesting motion downward -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M13.6,15.4 L20.4,15.4 L20.4,22.2 Z" />
+</vector>
