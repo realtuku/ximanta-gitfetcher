@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ximanta GitFetcher — Data Extraction Rules (Android 12 / API 31+).
+
+    Referenced by AndroidManifest.xml:
+        android:dataExtractionRules="@xml/data_extraction_rules"
+
+    Android 12 replaced the single-purpose "Auto Backup" system with
+    "Data Extraction Rules," which distinguish between two independent
+    scenarios:
+
+        <cloud-backup>      → Google Drive / cloud backup & restore
+        <device-transfer>   → Direct phone-to-phone transfer
+                              (e.g. Pixel's "Copy my data")
+
+    Each block takes its own <include> and <exclude> directives, so an
+    app can, for example, back up to the cloud but NOT allow the data
+    to be moved to a new device — or vice versa.
+
+    Ximanta GitFetcher has no persistent user state (no accounts, no
+    preferences, no local database). Downloaded files live in shared
+    external storage — Downloads/Ximanta/ — which is NOT part of the
+    app's private data and is therefore never touched by these rules.
+    Both blocks therefore only contain defensive exclusions.
+
+    On Android 12+ this file is used INSTEAD of backup_rules.xml.
+    On Android 11 and below, backup_rules.xml is used instead of this
+    one. Both files must be present so the app behaves correctly across
+    the whole install base.
+-->
+<data-extraction-rules>
+
+    <!-- ============================================================= -->
+    <!-- CLOUD BACKUP (Google Drive, etc.)                             -->
+    <!-- ============================================================= -->
+    <cloud-backup>
+
+        <!--
+            No <include> directives means: back up the entire app data
+            directory by default. That's what we want — if a future
+            version writes SharedPreferences (for example, "remember
+            that the user accepted the Terms"), those preferences will
+            be backed up automatically and restored on reinstall.
+        -->
+
+        <!-- ---------- Excludes — caches & temp files ---------------- -->
+
+        <!-- OkHttp on-disk response cache (only created if we enable it). -->
+        <exclude domain="file" path="okhttp_cache/" />
+
+        <!-- Runtime scratch files written by Kotlin / Compose tooling. -->
+        <exclude domain="file" path=".kotlin/" />
+
+        <!-- Generic temp folders our code might create for streaming downloads. -->
+        <exclude domain="file" path="tmp/" />
+        <exclude domain="file" path="temp/" />
+
+        <!-- Any log files the app writes at runtime. -->
+        <exclude domain="file" path="logs/" />
+
+        <!--
+            Belt-and-suspenders: exclude the whole cache domain.
+            The framework already skips it, but being explicit makes
+            the intent obvious and future-proofs against config drift.
+        -->
+        <exclude domain="cache" path="." />
+
+        <!-- Files written to getNoBackupFilesDir() — already excluded,
+             listed here for documentation. -->
+        <exclude domain="file" path="no_backup/" />
+
+        <!--
+            App-scoped external storage is not backed up to the cloud
+            in modern Android, but explicitly excluding it avoids
+            surprises on OEM ROMs that behave differently.
+        -->
+        <exclude domain="external" path="." />
+
+        <!--
+            Files under this directory are user-downloaded artifacts.
+            They are never written to app-private storage, so they
+            can't be included here — but if you ever add an in-app
+            "downloads cache" for previewing, exclude it too.
+        -->
+        <exclude domain="file" path="downloads_cache/" />
+
+    </cloud-backup>
+
+    <!-- ============================================================= -->
+    <!-- DEVICE-TO-DEVICE TRANSFER                                     -->
+    <!-- ============================================================= -->
+    <device-transfer>
+
+        <!--
+            Device-transfer is the "Copy my data" flow during new-phone
+            setup. For our app there is genuinely nothing to transfer
+            (no accounts, no preferences, no state). But mirroring the
+            same exclusions keeps the two scenarios in sync and stops
+            anyone from accidentally shipping caches over USB.
+        -->
+
+        <exclude domain="file" path="okhttp_cache/" />
+        <exclude domain="file" path=".kotlin/" />
+        <exclude domain="file" path="tmp/" />
+        <exclude domain="file" path="temp/" />
+        <exclude domain="file" path="logs/" />
+        <exclude domain="cache" path="." />
+        <exclude domain="file" path="no_backup/" />
+        <exclude domain="external" path="." />
+        <exclude domain="file" path="downloads_cache/" />
+
+    </device-transfer>
+
+</data-extraction-rules>
