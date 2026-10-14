@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ximanta GitFetcher — XML colour palette.
+
+    This file mirrors the Compose palette in
+    ui/theme/Color.kt so that:
+      • themes.xml can reference named colours
+      • The splash/launcher window can tint correctly
+      • Any future XML layout or notification has a source of truth
+
+    Whenever a colour changes in Color.kt, change it here too — the two
+    files serve different subsystems (Compose runtime vs. Android XML
+    resource loader) and cannot share values directly.
+-->
+<resources>
+
+    <!-- ========================================================= -->
+    <!-- BRAND                                                     -->
+    <!-- ========================================================= -->
+
+    <color name="ximanta_violet">#FF6C4CF1</color>
+    <color name="ximanta_violet_dark">#FFCDBDFF</color>
+    <color name="ximanta_violet_container">#FFE6E0FF</color>
+    <color name="ximanta_violet_container_dark">#FF3B2A78</color>
+
+    <color name="ximanta_mint">#FF2DD4BF</color>
+    <color name="ximanta_mint_dark">#FF6EE7D3</color>
+    <color name="ximanta_mint_container">#FFB4F1E4</color>
+    <color name="ximanta_mint_container_dark">#FF005046</color>
+
+    <color name="ximanta_slate">#FF24292F</color>
+    <color name="ximanta_slate_dark">#FFCBD2D9</color>
+
+    <!-- ========================================================= -->
+    <!-- SEMANTIC                                                  -->
+    <!-- ========================================================= -->
+
+    <color name="ximanta_success">#FF16A34A</color>
+    <color name="ximanta_warning">#FFF59E0B</color>
+    <color name="ximanta_error">#FFDC2626</color>
+    <color name="ximanta_info">#FF2563EB</color>
+
+    <!-- ========================================================= -->
+    <!-- SURFACES — LIGHT                                          -->
+    <!-- ========================================================= -->
+
+    <color name="surface_light">#FFFBFBFE</color>
+    <color name="background_light">#FFFBFBFE</color>
+    <color name="on_surface_light">#FF111114</color>
+    <color name="on_background_light">#FF111114</color>
+    <color name="surface_variant_light">#FFEBEAF2</color>
+    <color name="on_surface_variant_light">#FF474651</color>
+    <color name="outline_light">#FF7A7885</color>
+    <color name="outline_variant_light">#FFCAC7D3</color>
+
+    <!-- ========================================================= -->
+    <!-- SURFACES — DARK                                           -->
+    <!-- ========================================================= -->
+
+    <color name="surface_dark">#FF0F0F13</color>
+    <color name="background_dark">#FF0A0A0E</color>
+    <color name="on_surface_dark">#FFE6E5EC</color>
+    <color name="on_background_dark">#FFE6E5EC</color>
+    <color name="surface_variant_dark">#FF2A2A32</color>
+    <color name="on_surface_variant_dark">#FFCAC7D3</color>
+    <color name="outline_dark">#FF948F9F</color>
+    <color name="outline_variant_dark">#FF474651</color>
+
+    <!-- ========================================================= -->
+    <!-- SYSTEM BARS                                               -->
+    <!-- ========================================================= -->
+
+    <color name="status_bar_color">#00000000</color>
+    <color name="navigation_bar_color">#00000000</color>
+    <color name="scrim">#99000000</color>
+
+    <!-- ========================================================= -->
+    <!-- SPLASH SCREEN (Android 12+)                               -->
+    <!-- ========================================================= -->
+
+    <color name="splash_background">#FF6C4CF1</color>
+    <color name="splash_background_dark">#FF0F0F13</color>
+
+    <!-- ========================================================= -->
+    <!-- TRANSPARENT / UTILITY                                     -->
+    <!-- ========================================================= -->
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+</resources>
