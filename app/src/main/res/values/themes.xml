@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ximanta GitFetcher — Android XML theme.
+
+    Two themes are declared here:
+
+        Theme.XimantaGitFetcher            → base theme, used by MainActivity
+        Theme.XimantaGitFetcher.Splash     → Android 12+ splash wrapper
+
+    The actual colour/typography decision is made at runtime by Compose
+    (see ui/theme/Theme.kt). This XML theme's job is limited to:
+
+      • Window background (so there is no white flash on cold start)
+      • Transparent system bars (paired with enableEdgeToEdge())
+      • Splash screen background (Android 12+)
+      • Status-bar / navigation-bar icon tint
+
+    The parent theme is Material 3's NoActionBar variant so that the
+    Activity does not try to inflate a legacy ActionBar.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ============================================================= -->
+    <!-- BASE THEME                                                    -->
+    <!-- ============================================================= -->
+    <style name="Theme.XimantaGitFetcher" parent="android:Theme.Material.NoActionBar">
+
+        <!-- Window background: matches Compose's background so there is no
+             flash of white between the window and the first frame. -->
+        <item name="android:windowBackground">@color/background_dark</item>
+
+        <!-- Transparent system bars — required for edge-to-edge. -->
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:navigationBarColor">@color/navigation_bar_color</item>
+
+        <!-- Android 15+ (API 35) deprecates the two items above and uses
+             this single flag instead. Setting it here is harmless on
+             older versions. -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+
+        <!-- Prevent a distracting animation when the keyboard opens. -->
+        <item name="android:windowSoftInputMode">adjustResize</item>
+
+        <!-- Force LTR text direction; the app is not localised for RTL yet. -->
+        <item name="android:layoutDirection">ltr</item>
+
+        <!-- Respect the user's system font scale for accessibility. -->
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="p">
+            shortEdges
+        </item>
+    </style>
+
+    <!-- ============================================================= -->
+    <!-- SPLASH THEME (Android 12+)                                    -->
+    <!-- ============================================================= -->
+    <!--
+        Android 12 introduced the SplashScreen API. The system shows a
+        themed splash window for 200–800 ms before MainActivity draws.
+
+        The parent below is the framework's Material theme — the splash
+        attributes are read by the OS directly, not by the app.
+    -->
+    <style name="Theme.XimantaGitFetcher.Splash"
+        parent="Theme.XimantaGitFetcher">
+
+        <item name="android:windowSplashScreenBackground">
+            @color/splash_background
+        </item>
+
+        <item name="android:windowSplashScreenAnimatedIcon">
+            @drawable/ic_launcher_foreground
+        </item>
+
+        <item name="android:windowSplashScreenIconBackgroundColor">
+            @color/ximanta_violet
+        </item>
+
+        <!-- How long the icon stays visible after the splash is dismissed. -->
+        <item name="android:windowSplashScreenAnimationDuration">400</item>
+
+        <!-- The splash is transparent to the content behind it — no post-
+             splash fade if we ever wanted to animate in ourselves. -->
+        <item name="android:windowSplashScreenBehavior">
+            default
+        </item>
+    </style>
+
+</resources>
