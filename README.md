@@ -181,7 +181,7 @@ MIT — do whatever you want, just don't blame me.
 
 <div align="center">
 
-**Built with ❤️ by [Ximanta](https://github.com/realximanta)**
+**Built with ❤️ by [Ximanta Here](https://github.com/realximanta)**
 
 ⭐ Star this repo if it saved you time.
 
