@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ximanta GitFetcher — user-facing strings.
+
+    Every string the user sees lives here. Compose code should read them
+    via `stringResource(R.string.…)` instead of hardcoding literals.
+    This makes localisation trivial (drop a new values-xx/strings.xml
+    alongside this one) and keeps the Kotlin files clean.
+
+    Naming convention: <screen>_<element>_<variant>
+        terms_title
+        url_hint_placeholder
+        files_button_download_all
+-->
+<resources>
+
+    <!-- ========================================================= -->
+    <!-- APP IDENTITY                                              -->
+    <!-- ========================================================= -->
+
+    <string name="app_name">Ximanta GitFetcher</string>
+    <string name="brand_ximanta">XIMANTA</string>
+    <string name="brand_tagline">G I T F E T C H E R</string>
+    <string name="brand_footer">Built by Ximanta</string>
+    <string name="brand_owner_handle">realximanta</string>
+
+    <!-- ========================================================= -->
+    <!-- TERMS SCREEN                                              -->
+    <!-- ========================================================= -->
+
+    <string name="terms_screen_title">Terms &amp; Conditions</string>
+    <string name="terms_screen_subtitle">Fetch any GitHub repository — every file, one flat list.</string>
+
+    <string name="terms_para_1_title">1. Public repositories only.</string>
+    <string name="terms_para_1_body">Ximanta GitFetcher uses GitHub\'s public API. Private or authenticated repositories cannot be accessed.</string>
+
+    <string name="terms_para_2_title">2. Rate limits apply.</string>
+    <string name="terms_para_2_body">The GitHub API allows 60 unauthenticated requests per hour per network. Heavy usage may temporarily block fetching.</string>
+
+    <string name="terms_para_3_title">3. You are responsible for downloaded content.</string>
+    <string name="terms_para_3_body">Do not redistribute copyrighted code. Respect each repository\'s license.</string>
+
+    <string name="terms_para_4_title">4. No warranty.</string>
+    <string name="terms_para_4_body">This app is provided as-is. Ximanta is not liable for any damages arising from its use.</string>
+
+    <string name="terms_para_5_title">5. Storage access.</string>
+    <string name="terms_para_5_body">To save files, the app requires permission to write to your Downloads folder.</string>
+
+    <string name="terms_checkbox_label">I have read and agree to the Terms &amp; Conditions.</string>
+    <string name="terms_button_agree">AGREE &amp; CONTINUE</string>
+    <string name="terms_button_disabled">TICK TO AGREE</string>
+
+    <!-- ========================================================= -->
+    <!-- URL SCREEN                                                -->
+    <!-- ========================================================= -->
+
+    <string name="url_screen_title">Repository URL</string>
+    <string name="url_field_hint">https://github.com/user/repo</string>
+    <string name="url_field_label">Paste a GitHub repo URL</string>
+    <string name="url_field_helper_empty">Paste a link to any public GitHub repository.</string>
+
+    <string name="url_button_fetch">Fetch</string>
+    <!-- %1$s = repo name, e.g. "Fetch ximanta-gitfetcher" -->
+    <string name="url_button_fetch_repo">Fetch %1$s</string>
+    <string name="url_button_fetching">Fetching…</string>
+
+    <string name="url_invalid_hint">Not a valid GitHub URL</string>
+    <!-- %1$s = owner, %2$s = repo name -->
+    <string name="url_valid_hint">%1$s/%2$s</string>
+
+    <string name="url_examples_header">TRY AN EXAMPLE</string>
+    <string name="url_example_ximanta">https://github.com/realximanta/ximanta-gitfetcher</string>
+    <string name="url_example_octocat">https://github.com/octocat/Hello-World</string>
+
+    <string name="url_action_paste">Paste from clipboard</string>
+    <string name="url_action_clear">Clear</string>
+
+    <!-- ========================================================= -->
+    <!-- FILES SCREEN                                              -->
+    <!-- ========================================================= -->
+
+    <string name="files_screen_title">Files</string>
+    <string name="files_search_hint">Filter files…</string>
+
+    <!-- %1$s = owner, %2$s = branch -->
+    <string name="files_subtitle">%1$s · %2$s</string>
+
+    <!-- %d = file count -->
+    <string name="files_chip_count">%d files</string>
+    <!-- %1$d = visible count, %2$d = total count -->
+    <string name="files_chip_count_filtered">%1$d / %2$d files</string>
+    <!-- %d = count of saved files -->
+    <string name="files_chip_saved">%d saved</string>
+
+    <string name="files_empty_title">No files found</string>
+    <string name="files_empty_subtitle">This repository appears to be empty.</string>
+    <string name="files_no_matches_title">No matches</string>
+    <string name="files_no_matches_subtitle">Try a different search term.</string>
+
+    <string name="files_button_download">Download</string>
+    <!-- %1$s = file name -->
+    <string name="files_button_download_file">Download %1$s</string>
+    <string name="files_state_downloaded">Downloaded</string>
+
+    <string name="files_button_download_all">Download All Files</string>
+    <string name="files_button_redownload_all">Re-download All</string>
+    <string name="files_button_downloading">Downloading…</string>
+
+    <!-- %1$d = total count, %2$s = pretty size (e.g. "212 KB") -->
+    <string name="files_summary_count_size">%1$d file(s) · %2$s total</string>
+    <!-- %1$d = completed, %2$d = total -->
+    <string name="files_progress">Downloading… %1$d / %2$d</string>
+    <!-- %d = count -->
+    <string name="files_all_saved">All %d file(s) saved</string>
+
+    <string name="files_saved_to">Saved to Downloads/Ximanta/</string>
+
+    <string name="files_action_back">Back</string>
+
+    <!-- ========================================================= -->
+    <!-- SNACKBAR / TOAST MESSAGES                                 -->
+    <!-- ========================================================= -->
+
+    <!-- %1$s = file name -->
+    <string name="snack_saved_file">Saved %1$s</string>
+    <!-- %1$s = error message -->
+    <string name="snack_save_failed">Save failed: %1$s</string>
+    <!-- %1$s = error message -->
+    <string name="snack_download_failed">Download failed: %1$s</string>
+
+    <!-- %1$d = success count, %2$s = repo name -->
+    <string name="snack_bulk_success">Downloaded %1$d file(s) to Downloads/Ximanta/%2$s/</string>
+    <!-- %1$d = success count, %2$d = failure count -->
+    <string name="snack_bulk_partial">Downloaded %1$d file(s), %2$d failed.</string>
+
+    <string name="snack_permission_denied">Storage permission denied — cannot save files.</string>
+
+    <!-- ========================================================= -->
+    <!-- NETWORK / API ERROR MESSAGES                              -->
+    <!-- ========================================================= -->
+
+    <!-- %1$s = owner, %2$s = repo -->
+    <string name="error_repo_not_found">Repository \"%1$s/%2$s\" was not found.\nCheck the URL, or the repo may be private.</string>
+
+    <string name="error_rate_limit">GitHub rate limit reached (HTTP 403).\nWait an hour, or try again later.</string>
+    <string name="error_rate_limit_tree">GitHub rate limit reached (HTTP 403).\nUnauthenticated limit is 60 req/hour.</string>
+
+    <!-- %1$d = HTTP status code -->
+    <string name="error_http_generic">GitHub returned HTTP %1$d.</string>
+
+    <!-- %1$s = network error detail -->
+    <string name="error_network">Network error: %1$s</string>
+    <string name="error_network_fallback">unable to reach github.com</string>
+
+    <!-- %1$s = detail -->
+    <string name="error_unexpected">Unexpected error: %1$s</string>
+
+    <!-- %1$s = branch name, %2$s = owner, %3$s = repo -->
+    <string name="error_branch_not_found">Branch \"%1$s\" not found in %2$s/%3$s.</string>
+
+    <!-- %1$d = HTTP status -->
+    <string name="error_tree_failed">Tree request failed: HTTP %1$d.</string>
+
+    <string name="error_tree_unknown">Could not read repository tree.</string>
+
+    <!-- %1$d = HTTP status, %2$s = file path -->
+    <string name="error_download_http">HTTP %1$d while downloading %2$s</string>
+
+    <!-- %1$s = file path -->
+    <string name="error_download_empty">Empty body for %1$s</string>
+
+    <!-- %1$s = file path, %2$s = detail -->
+    <string name="error_download_io">Download failed for %1$s: %2$s</string>
+
+    <!-- %1$s = file path, %2$s = detail -->
+    <string name="error_download_unexpected">Unexpected error for %1$s: %2$s</string>
+
+    <!-- ========================================================= -->
+    <!-- STORAGE / FILE-SAVER ERRORS                               -->
+    <!-- ========================================================= -->
+
+    <string name="error_mediastore_reject">MediaStore rejected the insert request.</string>
+    <string name="error_mediastore_stream">Could not open output stream for MediaStore.</string>
+    <!-- %1$s = detail -->
+    <string name="error_write_failed">Write failed: %1$s</string>
+    <!-- %1$s = detail -->
+    <string name="error_save_unexpected">Unexpected save error: %1$s</string>
+    <!-- %1$s = folder path -->
+    <string name="error_mkdir_failed">Could not create folder: %1$s</string>
+    <!-- %1$s = detail -->
+    <string name="error_legacy_write">Legacy write failed: %1$s</string>
+    <!-- %1$s = detail -->
+    <string name="error_legacy_unexpected">Unexpected legacy error: %1$s</string>
+
+    <!-- ========================================================= -->
+    <!-- ACCESSIBILITY / CONTENT DESCRIPTIONS                      -->
+    <!-- ========================================================= -->
+
+    <string name="cd_ximanta_logo">Ximanta logo</string>
+    <string name="cd_github_icon">GitHub</string>
+    <string name="cd_search_icon">Search</string>
+    <string name="cd_back_button">Back</string>
+    <string name="cd_error_icon">Error</string>
+    <string name="cd_shield_icon">Privacy &amp; terms</string>
+
+    <!-- ========================================================= -->
+    <!-- ABOUT / OPTIONAL FOOTER LINKS                             -->
+    <!-- ========================================================= -->
+
+    <!-- %1$s = version, e.g. "1.0.0" -->
+    <string name="about_version">Version %1$s</string>
+    <string name="about_made_with">Made with ❤ by Ximanta</string>
+
+    <!-- ========================================================= -->
+    <!-- PLACEHOLDER / DEVELOPMENT                                 -->
+    <!-- ========================================================= -->
+
+    <string name="label_loading">Loading…</string>
+    <string name="label_retry">Retry</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_ok">OK</string>
+
+</resources>
