@@ -151,38 +151,37 @@ object RepoParser {
      *
      * Repo names may contain dots — GitHub allows them.
      */
-    private fun parseShorthand(input: String): Pair<String, String>? {
+private fun parseShorthand(input: String): Pair<String, String>? {
 
-        // Reject markers that only appear in URLs or SSH strings.
-        if (input.contains("://")) return null
-        if (input.contains("@")) return null
-        if (input.contains(":")) return null
-        if (input.any { it.isWhitespace() }) return null
-        if (input.contains("?")) return null
-        if (input.contains("#")) return null
+    // Reject markers that only appear in URLs or SSH strings.
+    if (input.contains("://")) return null
+    if (input.contains("@")) return null
+    if (input.contains(":")) return null
+    if (input.any { it.isWhitespace() }) return null
+    if (input.contains("?")) return null
+    if (input.contains("#")) return null
 
-        // Strip trailing slashes and .git
-        var cleaned = input.trimEnd('/')
-        if (cleaned.endsWith(".git", ignoreCase = true)) {
-            cleaned = cleaned.substring(0, cleaned.length - 4)
-        }
-
-        val segments = cleaned.split('/').filter { it.isNotBlank() }
-        if (segments.size != 2) return null
-
-        val owner = segments[0]
-        val repo = segments[1]
-
-        // A dot in the first segment means "this is a hostname", not a username.
-        // GitHub usernames technically may contain dots, but the ambiguity cost
-        // outweighs the benefit — a user with a dotted username can paste the
-        // full URL instead.
-        if (owner.contains('.')) return null
-
-        if (!isValidSlug(owner) || !isValidSlug(repo)) return null
-
-        return owner to repo
+    // Strip trailing slashes and .git
+    var cleaned = input.trimEnd('/')
+    if (cleaned.endsWith(".git", ignoreCase = true)) {
+        cleaned = cleaned.substring(0, cleaned.length - 4)
     }
+
+    val segments = cleaned.split('/').filter { it.isNotBlank() }
+    if (segments.size != 2) return null
+
+    val owner = segments[0]
+    val repo = segments[1]
+
+    // Allow dots in owner segment (GitHub usernames may contain '.').
+    // Accept shorthand like "some.user/project" — the API will perform final validation.
+    // (Previous code rejected dotted owners; that line was removed.)
+    // if (owner.contains('.')) return null  <-- removed
+
+    if (!isValidSlug(owner) || !isValidSlug(repo)) return null
+
+    return owner to repo
+}
 
     // -------------------------------------------------------------------------
     // Helpers
